@@ -1,0 +1,6 @@
+BadEmail,bademail,30000.0 -> Invalid email format
+LowSalary,low@gmail.com,-100.0 -> Salary must be greater than 0
+Duplicate,tanishq@gmail.com,55000.0 -> Duplicate email
+BadEmail,bademail,30000.0 -> Invalid email format
+LowSalary,low@gmail.com,-100.0 -> Salary must be greater than 0
+Duplicate,tanishq@gmail.com,55000.0 -> Duplicate email

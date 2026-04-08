@@ -1,0 +1,6 @@
+name,email,salary
+Tanishq,tanishq@gmail.com,50000
+Aman,aman@gmail.com,42000
+BadEmail,bademail,30000
+LowSalary,low@gmail.com,-100
+Duplicate,tanishq@gmail.com,55000

@@ -1,0 +1,5 @@
+
+http://localhost:8080/employees
+POST /pipeline/db-transfer
+CRUD /employees
+CSV Import http://localhost:8080/pipeline/csv-import
