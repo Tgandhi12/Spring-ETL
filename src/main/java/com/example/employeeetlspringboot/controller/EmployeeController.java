@@ -5,10 +5,12 @@ import com.example.employeeetlspringboot.entity.target.TargetEmployee;
 import com.example.employeeetlspringboot.service.EmployeeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/employees")
 @RequiredArgsConstructor
@@ -17,12 +19,14 @@ public class EmployeeController {
     private final EmployeeService employeeService;
 
     @PostMapping
-    public TargetEmployee createEmployee(@Valid @RequestBody EmployeeRequest request) {
+    public TargetEmployee createEmployee(@RequestBody EmployeeRequest request) {
+        log.info("API called: Create Employee");
         return employeeService.createEmployee(request);
     }
 
     @GetMapping
     public List<TargetEmployee> getAllEmployees() {
+        log.info("API called: Get all employees");
         return employeeService.getAllEmployees();
     }
 
