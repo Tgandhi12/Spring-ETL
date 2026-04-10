@@ -1,0 +1,3 @@
+Bad Email,bademail,25000.0 -> Invalid email format
+Low Salary,low@gmail.com,-200.0 -> Salary must be greater than 0
+Duplicate User,riya@gmail.com,45000.0 -> Duplicate email

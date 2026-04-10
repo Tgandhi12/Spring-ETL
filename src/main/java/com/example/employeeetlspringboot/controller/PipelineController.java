@@ -21,8 +21,15 @@ public class PipelineController {
     @PostMapping("/csv-import")
     public String importCsv() {
         return filePipelineService.importFromCsv(
-                "src/main/resources/employees.csv",
-                "src/main/resources/invalid-records.txt"
+                "employees.csv",
+                "invalid-records.txt"
+        );
+    }
+    @PostMapping("/json-import")
+    public String importJson(){
+        return filePipelineService.importFromJson(
+                "employees.json",
+                "invalid-records.txt"
         );
     }
 }

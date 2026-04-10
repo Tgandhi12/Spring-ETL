@@ -5,8 +5,10 @@ import com.example.employeeetlspringboot.entity.target.TargetEmployee;
 import com.example.employeeetlspringboot.repository.target.TargetEmployeeRepository;
 import com.example.employeeetlspringboot.util.CsvEmployeeReader;
 import com.example.employeeetlspringboot.util.InvalidRecordWriter;
+import com.example.employeeetlspringboot.util.JsonEmployeeReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.boot.jaxb.SourceType;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,17 +19,35 @@ import java.util.List;
 public class FilePipelineService {
 
     private final CsvEmployeeReader csvEmployeeReader;
+    private final JsonEmployeeReader jsonEmployeeReader;
     private final InvalidRecordWriter invalidRecordWriter;
     private final TargetEmployeeRepository targetEmployeeRepository;
     private final ValidationService validationService;
 
-    public String importFromCsv(String inputPath, String invalidOutputPath) {
-        int inserted = 0;
-        int invalid = 0;
-        int duplicates = 0;
-
+    public String importFromCsv(String inputFileName, String invalidOutputPath) {
         try {
-            List<EmployeeRequest> employees = csvEmployeeReader.read(inputPath);
+            List<EmployeeRequest> employees = csvEmployeeReader.read(inputFileName);
+            return processEmployees(employees, invalidOutputPath, "CSV");
+        } catch (Exception e) {
+            log.error("CSV import failed: {}", e.getMessage());
+            return "CSV import failed: " + e.getMessage();
+        }
+    }
+
+    public String importFromJson(String inputFileName, String invalidOutputPath) {
+        try {
+            List<EmployeeRequest> employees = jsonEmployeeReader.read(inputFileName);            return processEmployees(employees, invalidOutputPath, "JSON");
+        } catch (Exception e) {
+            log.error("JSON import failed: {}", e.getMessage());
+            return "JSON import failed: " + e.getMessage();
+        }
+    }
+
+        private String processEmployees(List<EmployeeRequest> employees, String invalidOutputPath, String sourceType)
+        {
+            int inserted = 0;
+            int invalid = 0;
+            int duplicates = 0;
 
             for (EmployeeRequest request : employees) {
                 String rawRecord = request.getName() + "," + request.getEmail() + "," + request.getSalary();
@@ -42,7 +62,7 @@ public class FilePipelineService {
                     if (targetEmployeeRepository.existsByEmail(normalizedEmail)) {
                         duplicates++;
                         invalidRecordWriter.write(invalidOutputPath, rawRecord, "Duplicate email");
-                        log.warn("Duplicate CSV record skipped: {}", normalizedEmail);
+                        log.warn("{} Duplicate  skipped: {}", sourceType, normalizedEmail);
                         continue;
                     }
 
@@ -59,17 +79,11 @@ public class FilePipelineService {
                 } catch (Exception e) {
                     invalid++;
                     invalidRecordWriter.write(invalidOutputPath, rawRecord, e.getMessage());
-                    log.warn("Invalid CSV record skipped: {}", rawRecord);
+                    log.warn("{} Invalid record skipped: {}", rawRecord);
                 }
             }
-
-        } catch (Exception e) {
-            log.error("CSV import failed: {}", e.getMessage());
-            return "CSV import failed: " + e.getMessage();
+            return "CSV import completed. Inserted: " + inserted +
+                    ", Invalid: " + invalid +
+                    ", Duplicates: " + duplicates;
         }
-
-        return "CSV import completed. Inserted: " + inserted +
-                ", Invalid: " + invalid +
-                ", Duplicates: " + duplicates;
     }
-}

@@ -1,0 +1,27 @@
+[
+  {
+    "name": "Riya",
+    "email": "riya@gmail.com",
+    "salary": 40000
+  },
+  {
+    "name": "Karan",
+    "email": "karan@gmail.com",
+    "salary": 35000
+  },
+  {
+    "name": "Bad Email",
+    "email": "bademail",
+    "salary": 25000
+  },
+  {
+    "name": "Low Salary",
+    "email": "low@gmail.com",
+    "salary": -200
+  },
+  {
+    "name": "Duplicate User",
+    "email": "riya@gmail.com",
+    "salary": 45000
+  }
+]
